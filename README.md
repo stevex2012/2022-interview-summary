@@ -37,12 +37,39 @@
     - 通过ast分析，所有的button添加上报逻辑
     - 规定button使用统一组件，上报逻辑由button组件触发
 ## webpack原理
-webpack是一个川行模块打包器，一切皆模块，build过程中会广播很多事件（切片编程思想），loader处理非js文件，plugin控制输出内容，
+webpack是一个川行模块打包器，一切皆模块，build过程中会广播很多事件（切片编程思想），loader处理非js文件，plugin控制输出内容
+webpack 默认支持js、json
+webapck server chunk在内存中
+webpack5 asset 模块，内置file/url-loader
  - 打包流程
    - 初始化参数，执行run func，根据入口文件，分析每个文件的依赖文件，构建依赖map，调用loader处理不同类型文件，调用plugin修改输出内容
+ - loader 吧非js/json转化为webpack能够处理的内容 ['style-loader','css-loader']处理顺序 后--->前
+   - style-loader Inject CSS into the DOM.
+   - css-loader
+   - postcss-loader css浏览器兼容问题 ，需要配置post.config.js文件，和兼容性.browserslistrc 文件
+   - less-loader 需要less module
+   - sass-loader 需要node-sass
+   - mini-css-extract-plugin - 提取css单独文件
+   - file-loader 解决图片引入问题，并将图片 copy 到指定目录，默认为 dist
+   - url-loader 解依赖 file-loader，当图片小于 limit 值的时候，会将图片转为 base64 编码，大于 limit 值的时候依然是使用 file-loader 进行拷贝
+   - img-loader 压缩图片
+ - plugin
+    - html-webpack-plugin js,注入html
+    - clean-webpack-plugin 清空dist
+  - babel （为了让webpack.config.js臃肿，，吧babel配置提取出来）配置文件 .babelrc.js, 对于在提案阶段的语法使用的时候，需要安装并使用插件
+    - bable-loader es6--->es5
+    - @babel/core Babel编译核心包
+    - @babel/preset-env 编译预设
+    - @babel/preset-flow
+    - @babel/preset-react
+    - @babel/prest-typescript
+  - sourceMap bundle映射源码，反向定位到源码位置 devtool: "source-map".....,有很多值可选，主要目的：打包是否生成source-map、source-map是否引入，（inline（内链）、eval形式执行代码），不引入，错误定位，（精确定位，行定位）
+  - sourceMap 原理，sourcemap是一个文件，里面保存着位置信息
 
 ## webpack loader，plugin思想，怎么实现事件调用和广播
 
 ## wepack和vite的区别
 
 ## vite原理
+
+## babel能力
