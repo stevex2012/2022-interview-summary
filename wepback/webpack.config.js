@@ -2,6 +2,15 @@ const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const {CleanWebpackPlugin} = require('clean-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const SpeedMeasureWebpackPlugin = require("speed-measure-webpack-plugin")
+const webpack = require('webpack')
+
+function resolve(dir){
+  return path.join(__dirname, dir)
+}
+
+
+const smp = new SpeedMeasureWebpackPlugin();
 
 console.log('process.env.NODE_ENV=', process.env.NODE_ENV) // 打印环境变量
 
@@ -16,7 +25,14 @@ const config = {
     rules: [
       {
         test: /\.js$/i,
+        exclude: /node_modules/,
         use: [
+          {
+            loader: 'thread-loader',
+            options: {
+              work:3,
+            }
+          },
           {
             loader: 'babel-loader',
             // options: {
@@ -62,6 +78,16 @@ const config = {
       // }
     ]
   },
+  resolve: {
+    // 别名
+    alias: {
+      '~': resolve('src'),
+      '@': resolve('src'),
+      'components': resolve('src/components'),
+    },
+    extensions: ['.js','.json','.wasm'],
+    modules: [resolve('src'), 'node_modules']
+  },
   plugins:[ // 配置插件
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
@@ -70,6 +96,10 @@ const config = {
     new MiniCssExtractPlugin({
       filename: '[name].[hash:8].css'
     }),
+    new webpack.IgnorePlugin({
+      resourceRegExp: /^\.\locale$/,
+      contextRegExp: /moment$/,
+    })
   ],
   devServer: {
     // contentBase: path.resolve(__dirname, 'public'), // 静态文件目录
@@ -83,4 +113,8 @@ module.exports = (env, argv) => {
   console.log('argv.mode=',argv.mode) // 打印 mode(模式) 值
   // 这里可以通过不同的模式修改 config 配置
   return config;
+  // https://github.com/stephencookdev/speed-measure-webpack-plugin/issues/167
+  // const a = smp.wrap(config);
+  // console.log('a----a',a)
+  // return a
 }

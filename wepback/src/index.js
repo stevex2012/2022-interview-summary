@@ -1,5 +1,7 @@
 import './main.css'
-import './index.less'
+import '~/main.css'
+// import './index.less'
+import '@/index.less'
 import logo from "../public/logo.png";
 
 const a = 'Hello ITEM'

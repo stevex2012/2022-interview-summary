@@ -53,9 +53,13 @@ webpack5 asset 模块，内置file/url-loader
    - file-loader 解决图片引入问题，并将图片 copy 到指定目录，默认为 dist
    - url-loader 解依赖 file-loader，当图片小于 limit 值的时候，会将图片转为 base64 编码，大于 limit 值的时候依然是使用 file-loader 进行拷贝
    - img-loader 压缩图片
+   - include/exclude 
+   - thread-loader 多进程打包
  - plugin
     - html-webpack-plugin js,注入html
     - clean-webpack-plugin 清空dist
+    - speed-measure-webpack-plugin 
+    - IgnorePlugin 防止在 import 或 require 调用时，生成以下正则表达式匹配的模块
   - babel （为了让webpack.config.js臃肿，，吧babel配置提取出来）配置文件 .babelrc.js, 对于在提案阶段的语法使用的时候，需要安装并使用插件
     - bable-loader es6--->es5
     - @babel/core Babel编译核心包
@@ -64,8 +68,13 @@ webpack5 asset 模块，内置file/url-loader
     - @babel/preset-react
     - @babel/prest-typescript
   - sourceMap bundle映射源码，反向定位到源码位置 devtool: "source-map".....,有很多值可选，主要目的：打包是否生成source-map、source-map是否引入，（inline（内链）、eval形式执行代码），不引入，错误定位，（精确定位，行定位）
-  - sourceMap 原理，sourcemap是一个文件，里面保存着位置信息
-
+  - sourceMap 原理，sourcemap是一个文件，里面保存着每个文件，每个代码的位置信息，通过一套映射机制实现code --- buildcode 间的映射
+  - webpack文件缓存策略 文件后缀名+hash.xxx [name].[path].[folder].[hash（每次构建生成的唯一 hash 值）].[chunkhash（文件的改动只会影响其所在 chunk 的 hash 值；）].[contenthash（每个文件都有单独的 hash 值，文件的改动只会影响自身的 hash 值；）].[ext(文件名)]
+  - resolve 
+    - alias 别名配置
+    - extensions 文件后缀名省略 ['.js','...'(保留默认)]
+    - modules 告诉 webpack 解析模块时应该搜索的目录
+  - externals 从输出的 bundle 中排除依赖
 ## webpack loader，plugin思想，怎么实现事件调用和广播
 
 ## wepack和vite的区别
