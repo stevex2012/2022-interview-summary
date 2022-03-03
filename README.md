@@ -1,5 +1,10 @@
 # 面试总结（查缺补漏）
 
+## 每家公司的成长点
+## 详细说明自己的优点 
+  - 页面性能优化（列出来）
+  - 重复工作工具话（页面生成工具需要详细说清楚，下来多练习）
+
 
 ## react 
   - 相关面试题
@@ -41,6 +46,11 @@ webpack是一个川行模块打包器，一切皆模块，build过程中会广�
 webpack 默认支持js、json
 webapck server chunk在内存中
 webpack5 asset 模块，内置file/url-loader
+利用缓存，提高构建速度 babel-loader 启动缓存 默认缓存位置./node_modules/cache/babel-loader
+压缩css
+压缩js terser-webpack-plugin
+tree-shaking 除没有使用的代码，以降低包的体积 webpack 默认支持 需要在 .bablerc 里面设置 models：false
+打包为空，入口文件没有代码使用
  - 打包流程
    - 初始化参数，执行run func，根据入口文件，分析每个文件的依赖文件，构建依赖map，调用loader处理不同类型文件，调用plugin修改输出内容
  - loader 吧非js/json转化为webpack能够处理的内容 ['style-loader','css-loader']处理顺序 后--->前
@@ -55,11 +65,16 @@ webpack5 asset 模块，内置file/url-loader
    - img-loader 压缩图片
    - include/exclude 
    - thread-loader 多进程打包
+   - cache-loader 缓存 位置 node_modules/.cache/cache-loader
  - plugin
     - html-webpack-plugin js,注入html
     - clean-webpack-plugin 清空dist
     - speed-measure-webpack-plugin 
     - IgnorePlugin 防止在 import 或 require 调用时，生成以下正则表达式匹配的模块
+    - webpack-bundle-analyzer 构建结果依赖分析
+    - optimize-css-assets-webpack-plugin  压缩css
+    - terser-webpack-plugin 压缩js
+    - purgrecss-webpack-plugin 清空无用css
   - babel （为了让webpack.config.js臃肿，，吧babel配置提取出来）配置文件 .babelrc.js, 对于在提案阶段的语法使用的时候，需要安装并使用插件
     - bable-loader es6--->es5
     - @babel/core Babel编译核心包
@@ -75,10 +90,42 @@ webpack5 asset 模块，内置file/url-loader
     - extensions 文件后缀名省略 ['.js','...'(保留默认)]
     - modules 告诉 webpack 解析模块时应该搜索的目录
   - externals 从输出的 bundle 中排除依赖
-## webpack loader，plugin思想，怎么实现事件调用和广播
+## webpack loader，plugin思想，怎么实现事件调用和广播(tapable)
 
 ## wepack和vite的区别
+vite使用浏览器es module能力，浏览器（入口）需要（import 什么）什么，就返回什么，需要预打包，把不是es module模块npm包包装成es module
+webpack全量打包，提前编译所有模块es6--》es5，构建，hmr过久（项目过大），分析、转换、编译、输出
+webpack依赖
+{
+  'app.js':{
+    dependencies:{'a.js','b.js'},
+    code: 'console.log(1+2)'
+  }
+}
 
 ## vite原理
+```js
+// "<script type="module" src="main.js">"
 
+// main.js
+import a from 'a.js'
+a();
+```
+浏览器记载main.js后，根据js内容，分析知道它import 了a.js 会请求对应a.js,
+vite做的劫持浏览器，找到对应node_module下文件，返回，
+为什么要劫持，举例：import react form 'react
+浏览器端的请求回事 http://localhost:3000/react,项目里面没有这个文件，所以需要进行劫持所以，
+劫持处理怎么设计实现的，应该会用esbuild进行预打包，这一步还会处理修改输出文件的import ，例如 import moment form ’moment‘ ---》 import moment from '@/modulus/monent' 便于通过flag区分
+为什么比webpack快？少了打包编译过程
+esbuid 使用go编写，比nodejs编写的打包器快
+vite开发服务器，HMR,源码更新，仅仅让这一个文件失效，让浏览器重新请求即可，其他npm包使用强缓存在浏览器，提速开发
+
+缺点：
+生态不如webpack
+prod环境构建，目前用的Rollup，原因在于esbuild对于css和代码分割不是很友好
+<!-- 还没接受市场考验 -->
 ## babel能力
+
+## node服务器发生性能问题如何定位及解决
+
+## 如何压测ssr页面

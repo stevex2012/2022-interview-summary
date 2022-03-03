@@ -2,21 +2,17 @@ import './main.css'
 import '~/main.css'
 // import './index.less'
 import '@/index.less'
-import logo from "../public/logo.png";
+// import logo from "../public/logo.png";
+import { add } from "./add.js";
+// const a = 'Hello ITEM'
 
-const a = 'Hello ITEM'
+// console.log('00logo',logo)
+// add(1,2)
+// console.log(a)
+console.log(add(1,2))
 
-console.log('00logo',logo)
+import('./desc.js').then(()=>{
+  console.log('123123123')
+})
 
-console.log(a)
 
-@log('hi')
-class ABCD {
-  name = '23';
-  info= ()=> ({
-    a:1,
-    b:2
-  })
-}
-
-module.exports = ABCD;
