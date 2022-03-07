@@ -194,8 +194,12 @@ presets: 预设
 1.定位问题
 2.解决问题
 3.性能监控
+------ 网上答案 esay-monitor + ab命令
 ## 如何压测ssr页面
-
+- ab 命令,locust, jmeter,go
+制定一种压测计划，压测条件，通过一种压测工具（常见ab命令），对测试页面进行，通过对ssr服务器接入监控模块，压测结束查看耗时较多的页面/接口
+通过分析代码进行优化（easy-monitor可以统计出耗时函数list，针对耗时考前的进行优化），
+后续应该建立/接入性能监控报警机制、建立备用机、接入一些简单的防御系统（ddos）
 ## esmodule 和cjs的区别
 1.使用方式，引入/导出
 2.esm输出“值的引用”，cjs输出“值的拷贝”
@@ -203,12 +207,71 @@ presets: 预设
 4.cjs同步加载，esm异步加载
 
 ## set 和 map的区别
+- set
+  - 类似数组，里面的值都是唯一的,允许存储任何形式的唯一值，NaN和undefined都可以被存储在Set 中， NaN之间被视为相同的值
+  - 常用api：get,set,add,clear,delete
++0 与 -0 在存储判断唯一性的时候是恒等的，所以不重复
+undefined 与 undefined 是恒等的，所以不重复
+NaN 与 NaN 是不恒等的，但是在 Set 中认为NaN与NaN相等，所有只能存在一个，不重复。
+作用：数组去重，交集，差集
+```js
+let set = new Set([-0,+0, undefined, undefined, NaN,NaN]) // Set(3) {0, undefined, NaN}
+```
+- map
+  - 构造函数，参数二位数组（let map=new Map([['js','react']])）类似对象，key-value集合，键的形式不限于字符串，也不能放重复项,
 
+map 中的键是有序的，对象中的键则不是
+size获取key个数
 ## promise原理
-
-## promise 和 async await的区别
+```js
+const p = new Promise((res,rej)=>{
+  res(1)
+  // rej(2)
+}).then(function onResolve(val){
+  //val: 1
+}, function onReject(e){
+  //e:2
+}).catch(e=>{
+  // e: 2
+})
+```
+- 什么是promise
+  - es6的一种新的类型，有三种状态，pending/resolve/reject，状态是单向变化不可
+  - 接受一个函数参数,里面有（res,rej）两个func来变换状态
+## promise 和 async/await的区别
+- async/await建立在promise上，不能用于普通回掉
+- 写法优雅
+- async/await看起来像同步
 
 ## redux 设计思想
+state,action,reducer
 
 ## ts
 - 说说什么是泛型
+
+## 微任务/宏任务
+任务queue，宏queue，微queue
+第一次：任务queue，中产生的宏、微任务分别进入各自队列
+微任务优先级大于宏任务
+微任务为空，再支持宏任务
+微任务中入队的微任务回继续执行
+宏任务中产生的微任务,会再次进入微任务队列执行
+每次执行完一个宏任务，都会监测微任务队列是否为空，不为空，则执行微任务
+总结：js执行过程中，产生的微任务、宏任务，分别进入到各自的任务队列，单主线程为空，优先执行微任务队列到空（微任务产生的微任务回继续入队，继续执行），微任务为空后，然后执行宏任务，每执行一个宏任务，都会监测微任务队列是否为空（不会空，回跳转执行微任务），微任务队列为空后，再次执行宏任务
+- 宏
+  - setTimeout
+  - setInterval
+  - MessageChannel 建立一个通信通道，给port1，和port2 提供通行
+    - let {port1,port2} = new MessageChannel();
+  - I/O,事件队列
+  - setImmediate 需要长时间运行的操作放在一个回调函数里，在浏览器完成后面的其他语句后，就立刻执行这个回调函数。
+  - script
+- 微
+  - requestAnimationFrame
+  - MutationObserve 监听dom数更改
+  - Promise.[then/catch/finally]
+  - process.nextTick
+  - queueMicrotask <https://developer.mozilla.org/zh-CN/docs/Web/API/HTML_DOM_API/Microtask_guide>
+
+## node异步任务
+<https://juejin.cn/post/6844903590977355790>
