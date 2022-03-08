@@ -59,7 +59,22 @@
 
 ## react 
 相关面试题
-  - react render 流程
+  - react render 流程 <https://juejin.cn/post/6959120891624030238>
+    - 首次：jsx-->react.createElm-->生成fiber-tree(render阶段)--->commit阶段（loop创建el node，appendchild）
+    - 更新: 状态更新--->render阶段（深度优先遍历创建fiber tree）-->reconciler算法标记变化点（这一步需要对边原来的fiber tree）---->commit
+
+  - vode为什么需要$typeof属性
+    - 安全，防止xss攻击（XSS 攻击是页面被注入了恶意的代码），csr/ssr的时候，如果没有这个标识位，恶意接口拦截，返回reactCreatElmg格式数据，回发生什么，react vnode数据结构，并且被render
+    - typeof是symbol，Symbol是无法 json化
+    - 
+  - 什么fibber
+    - 2层含义：程序架构、数据结构（有了fiber，怎么可执行可中断，可恢复）
+    - 链表结构- child（第一个字节点）,sibling（第一个兄弟节点）,return(指向父级node),其中还需要记state，ref，props等信息
+    - 支持vnode的增量渲染
+  - react diff dom的事件复查度为什么是O(n)
+    - 分层比较，2个vnode只会比较同一层
+    - 不同类型的组件，树形结构不同\
+    - 统一层级的子组件通过key来区分，update，remove，add
   - 16之前和之后的区别（fiber）
     - 16之前，更新dom操作，一气呵成，dom层级过深，过大，导致浏览器卡顿，无法实时响应，
     - 16fiber架构，借用操作系统协同调度思想，把页面的操作（点击，加载资源，执行脚本，。。。分成不同优先级任务，让这个过程变得可中断），实现根据任务优先级切切片调用，在必要的时，让出控制权
@@ -70,9 +85,18 @@
   - react hooks 设计思想
   - 自己如何实现一个hooks库
   - hoc和hooks的区别
+    - hoc 是接受一个组件，返回一个新组件的函数
   - react组件性能监控方案（hoc）
   - useEffect 和 useLayoutEffect 的区别
-  - 
+  - react合成事件 
+    - 绑定到dom上的事件被统一绑定在根节点上
+    - dom上的事件，被react处理替换为空函数 function noop(){}
+    - React 实际上并不将事件附加到子节点本身，React 使用单个事件侦听器侦听顶层的所有事件，意味着 React 在更新 DOM 时不需要跟踪事件监听器。
+    - 为什么需要设计合成事件系统：抹平浏览器之间的差异，不需要跟踪事件监听器
+    - SyntheticEvent 实例将被传递给你的事件处理函数，它是浏览器的原生事件的跨浏览器包装器
+    - return false 不能阻止事件传递，使用e.stopPropagation() 或 e.preventDefault() 作为替代方案
+    - 如需注册捕获阶段的事件处理函数，则应为事件名添加 Capture
+    - React 17 开始，onScroll 事件在 React 中不再冒泡。这与浏览器的行为一致，并且避免了当一个嵌套且可滚动的元素在其父元素触发事件时造成混乱
   - react是单向数据流，单父组件rerender后，子组件的props没有变化，也会rerender
   - react-rerender机制
   - react---Portals插槽
@@ -85,7 +109,12 @@
     - 同步： 在 React 无法控制的地方，比如原生事件，具体就是在 addEventListener 、setTimeout、setInterval 等事件中，就只能同步更新
   - 为什么不能用index作为key
     - 当数组顺序变化的时候，所有的vnode都将重建
-
+  - StrictMode 
+    - 识别废弃的生命周期、提示一些不安全的api使用
+  - 解决props传递层级过深，context/使用第三状态管理库，props挂在state上
+  - 防止react组件重复render
+    - memo only fcmp
+    - clsCMP使用shouldComponentUpdate()
 ## 如何设计一个接入无感知的埋点sdk系统
 目的：接入系统无需手动添加sdk，无需手动添加任何事件
 - 初始化
