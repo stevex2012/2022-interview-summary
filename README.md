@@ -80,8 +80,8 @@
     - 16fiber架构，借用操作系统协同调度思想，把页面的操作（点击，加载资源，执行脚本，。。。分成不同优先级任务，让这个过程变得可中断），实现根据任务优先级切切片调用，在必要的时，让出控制权
   - 源码
   - hook实现及源码，为什么不能条件语句中执行
-  - react hook 为什么不能在条件/循环语句中使用
-    - hook在函数组件（fcmp）中使用，fcmp是无状态，想要做到状态控制，需要一个必包保存fcmp中的hooks（状态），而react中采用的是一个单向链表保存fcmp中的调用顺序，fcmp中每一个hook的使用，会按照实行顺序链接到单向链表上，如果使用条件/循环，那么链表的上对应顺序就混乱，增加bug风险
+    - react hook 为什么不能在条件/循环语句中使用
+      - hook在函数组件（fcmp）中使用，fcmp是无状态，想要做到状态控制，需要一个必包保存fcmp中的hooks（状态），而react中采用的是一个单向链表保存fcmp中的调用顺序，fcmp中每一个hook的使用，会按照实行顺序链接到单向链表上，如果使用条件/循环，那么链表的上对应顺序就混乱，增加bug风险
   - react hooks 设计思想
   - 自己如何实现一个hooks库
   - hoc和hooks的区别
@@ -115,6 +115,7 @@
   - 防止react组件重复render
     - memo only fcmp
     - clsCMP使用shouldComponentUpdate()
+  - context + useReducer 状态管理
 ## 如何设计一个接入无感知的埋点sdk系统
 目的：接入系统无需手动添加sdk，无需手动添加任何事件
 - 初始化
@@ -274,6 +275,15 @@ const p = new Promise((res,rej)=>{
 
 ## redux 设计思想
 state,action,reducer
+store :存储state库
+action: 通过dispatch 触发修改state动作
+reducer：接受修改state的type，修改数据返回心的state
+数据单一流动，不可手动直接修改，不许通过dispatch处罚reducer修改
+采用发布订阅模式，单一流动行保证了数据可回述对测试友好
+
+中间件
+常用：redux-thunk , redux-saga
+
 
 ## ts
 - 说说什么是泛型
@@ -304,3 +314,7 @@ state,action,reducer
 
 ## node异步任务
 <https://juejin.cn/post/6844903590977355790>
+
+## gunt
+
+## gulp

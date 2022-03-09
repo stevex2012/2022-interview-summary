@@ -1,9 +1,17 @@
 import logo from './logo.svg';
 import './App.css';
-import { useState } from "react";
+import { useState, useEffect, useLayoutEffect } from "react";
 import Hello from "./Hello";
 const App =()=> {
   const [first, setfirst] = useState(0)
+  useEffect(() => {
+    console.log('useEffect')
+  }, [])
+
+  useLayoutEffect(() => {
+    console.log('useLayoutEffect')
+  }, [])
+  
   const handleClick = (e)=>{
    
     setTimeout(()=>{
