@@ -318,3 +318,13 @@ reducer：接受修改state的type，修改数据返回心的state
 ## gunt
 
 ## gulp
+
+## 组合继承
+
+## https/tcp/ssl3次握手，4次挥手
+
+## 数据
+ - 跨域问题
+ - 会不会阻赛页面render
+ - 选择最小的请求实体
+ - 减少不必要的服务器响应
