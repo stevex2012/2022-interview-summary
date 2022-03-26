@@ -23,7 +23,7 @@ function foo(S,T){
         // 失败
         // console.log(S.slice(i-1))
         console.log(S.slice(i-1).indexOf(T[0]))
-        startIdx = S.slice(i-1).indexOf(T[0]) + startIdx
+        startIdx = S.slice(i-1).indexOf(T[0]) + i - 1
         console.log('startIdx',startIdx)
         res = []
         pos = 0;
