@@ -340,3 +340,60 @@ reducer：接受修改state的type，修改数据返回心的state
 
 ## vue and react的区别
 
+## 构造函数
+为了防止构造function 没有使用new 调用
+1.使用“use strict”
+2.在构造function 内部判断
+如果构造函数内部有return语句，而且return后面跟着一个对象，new命令会返回return语句指定的对象；否则，就会不管return语句
+```js
+function A(){
+  if(!(this instanceOf A)){
+    return new A()
+  }
+}
+function myNew(parent){
+  let obj = Object.create(null);
+  obj.__proto__ = parent.prototype;
+
+  const fn = Symbol();
+  obj[fn] = parent;
+
+  obj[fn]();
+  delete obj[fn]
+  return obj;
+}
+
+function _new(constructor, params){
+  const args = [].slice.call(arguments);
+  const constructor = args.shift;
+
+  const context = Object.create(constructor.prototype);
+
+  const result = constructor.apply(context, args)
+
+  return (typeOf result === 'object' && result !== null) ? result : context;
+}
+
+function _create(o){
+  function F(){}
+  F.prototype = o;
+  return new F();
+}
+
+
+```
+
+
+## 前端工程化
+- 代码规范js，css，自动格式化
+- 提交规范
+- 提交触发规范检测（husky）
+- 版本分支管理（如何定义开发分支，发布分支，主分支，特性分支。。。。）
+- code merge ---》 需要触发一个code reviewer执行review，需要一种通知机制
+- 流水线，ci/cd持续集成
+- 前端监控 错误监控、性能监控
+- dan yuan
+
+## git flow 流
+
+
